@@ -1,23 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from './components/Header';
+import { useState } from 'react';
 
 function App() {
+  // kitapları tuttuğumuz state
+  const [books, setBooks] = useState([]);
+
+  // formun gönderilme olayı
+  const handleSubmit = (e) => {
+    // sayfa yenilemyi engeller
+    e.preventDefault();
+    // formdak inputa yazılana erişme
+    const bookName = e.target[0].value;
+
+    // kitap objesi oluşturma
+    const newBook = {
+      // id oluşturma
+      id: new Date().getTime(),
+      bookName,
+      date: new Date().toLocaleString(),
+    };
+
+    // kitapları diziye ekleme
+    setBooks([...books, newBook]);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <Header />
+      <main className="container">
+        {/* form */}
+        <form
+          onSubmit={handleSubmit}
+          className="d-flex gap-3 mt-4 p-4"
         >
-          Learn React
-        </a>
-      </header>
+          <input className="form-control shadow" type="text" />
+          <button className="btn btn-warning shadow">Ekle</button>
+        </form>
+      </main>
     </div>
   );
 }
