@@ -1,5 +1,7 @@
 import Header from './components/Header';
 import { useState } from 'react';
+import Card from './components/Card';
+import { toast } from 'react-toastify';
 
 function App() {
   // kitapları tuttuğumuz state
@@ -9,7 +11,8 @@ function App() {
   const handleSubmit = (e) => {
     // sayfa yenilemyi engeller
     e.preventDefault();
-    // formdak inputa yazılana erişme
+
+    // formdaki inputa yazılana erişme
     const bookName = e.target[0].value;
 
     // kitap objesi oluşturma
@@ -22,6 +25,24 @@ function App() {
 
     // kitapları diziye ekleme
     setBooks([...books, newBook]);
+
+    // inputu temizleme
+    e.target[0].value = '';
+
+    // bildirim ver
+    toast.success('Kitap başarıyla eklendi');
+  };
+
+  // elemanı kaldırır
+  const handleDelete = (delete_id) => {
+    // diziden eleman kaldırma
+    const filtred = books.filter((book) => book.id !== delete_id);
+
+    // state 'i güncelle
+    setBooks(filtred);
+
+    // bildirim verme
+    toast.error('Kitap Kaldırıldı');
   };
 
   return (
@@ -36,6 +57,17 @@ function App() {
           <input className="form-control shadow" type="text" />
           <button className="btn btn-warning shadow">Ekle</button>
         </form>
+
+        <div className="d-flex flex-column gap-5 mt-4">
+          {/* Kitaplar Listesi */}
+          {books.map((book) => (
+            <Card
+              key={book.id}
+              book={book}
+              handleDelete={handleDelete}
+            />
+          ))}
+        </div>
       </main>
     </div>
   );
